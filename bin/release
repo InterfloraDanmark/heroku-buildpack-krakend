@@ -3,5 +3,5 @@
 cat << EOF
 ---
 default_process_types:
-  web: krakend run -c krakend.json
+  web: krakend run -c krakend.json -p $PORT
 EOF
