@@ -1,0 +1,1 @@
+# Heroku buildpack for KrakenD
