@@ -1,14 +1,20 @@
 #!/bin/bash
 
 KRAKEND_VERSION="1.4.1"
-echo "-----> Downloading KrakenD $KRAKEND_VERSION"
-curl -s https://repo.krakend.io/bin/krakend_${KRAKEND_VERSION}_amd64.tar.gz | tar -zxv -C $1 -f -
+BUILD_DIR="$1"
 
-if [ -f $1/Procfile ]; then
+echo "-----> Downloading KrakenD $KRAKEND_VERSION"
+[ -d $BUILD_DIR/.heroku ] || mkdir $BUILD_DIR/.heroku
+curl -s https://repo.krakend.io/bin/krakend_${KRAKEND_VERSION}_amd64.tar.gz | tar -zxv -C $BUILD_DIR/.heroku -f -
+
+[ -d $BUILD_DIR/.profile.d ] || mkdir -p $BUILD_DIR/.profile.d
+cp -v profile/* $BUILD_DIR/.profile.d/
+
+if [ -f $BUILD_DIR/Procfile ]; then
   echo "Using existing Procfile"
 else
   echo "Creating default Procfile"
-  cat > $1/Procfile << EOF
+  cat > $BUILD_DIR/Procfile << EOF
 web: krakend run -c krakend.json -p \$PORT
 EOF
 fi
