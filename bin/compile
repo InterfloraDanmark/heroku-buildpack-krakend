@@ -3,3 +3,12 @@
 KRAKEND_VERSION="1.4.1"
 echo "-----> Downloading KrakenD $KRAKEND_VERSION"
 curl -s https://repo.krakend.io/bin/krakend_${KRAKEND_VERSION}_amd64.tar.gz | tar -zxv -C $1 -f -
+
+if [ -f $1/Procfile ]; then
+  echo "Using existing Procfile"
+else
+  echo "Creating default Procfile"
+  cat > $1/Procfile << EOF
+web: krakend run -c krakend.json -p \$PORT
+EOF
+fi
